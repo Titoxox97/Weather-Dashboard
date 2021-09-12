@@ -1,0 +1,117 @@
+body {
+  margin: 0;
+  background-color: lightpink;
+}
+h1 {
+  margin: 0;
+  padding: 16px;
+  text-align: center;
+  background-color: lightskyblue;
+  color: black;
+  font-family: sans-serif;
+}
+.handleCitySearch {
+  background-color: lightskyblue;
+}
+
+h2 {
+  font-size: 20px;
+  margin-top: 50px;
+}
+h3 {
+  font-size: 12px;
+  font-weight: bold;
+}
+p {
+  font-size: 12px;
+}
+
+.flexContainer {
+  display: flex;
+  max-width: 950px;
+  margin: auto;
+}
+
+.searchColumn {
+  padding: 16px;
+  width: 200px;
+  border: 1 solid black;
+}
+.searchColumn .searchHistoryContainer {
+  background-color: whitesmoke;
+  border: 1px solid darkgray;
+  border-radius: 4px;
+  margin-top: 16px;
+}
+
+.searchHistoryContainer > button {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.searchHistoryContainer > button:last-child {
+  border: none;
+}
+
+.searchColumn > input {
+  width: 132px;
+}
+
+.reportColumn {
+  padding: 16px;
+  flex: 1;
+}
+
+.todaysForecastContainer {
+  padding: 16px;
+  border: solid black 1px;
+  border-radius: 4px;
+  background-color: whitesmoke;
+}
+
+.forecastCardsContainer {
+  display: flex;
+  margin-top: 50px;
+}
+
+.forecastCard {
+  flex: 1;
+  padding: 8px;
+  background-color: lightskyblue;
+  color: black;
+  border-radius: 4px;
+  margin: 0 8px;
+}
+.forecastCard:first-child {
+  margin-left: 0;
+}
+.forecastCard:last-child {
+  margin-right: 0;
+}
+
+.uv-favorable,
+.uv-moderate,
+.uv-extreme,
+.uv-undefined {
+  font-weight: bold;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.uv-favorable {
+  background-color: rgb(43, 194, 43);
+}
+
+.uv-moderate {
+  background-color: yellow;
+}
+
+.uv-extreme {
+  background-color: rgb(243, 8, 8);
+}
+
+.uv-undefined {
+  background-color: gray;
+}
