@@ -18,7 +18,7 @@ $(document).ready(function () {
       // get list of cities from local storage and if the data doesn't exist create an empty array
       let cityArray = JSON.parse(localStorage.getItem("inputCity")) || [];
   
-      // add inputCity to li
+    
       cityArray.push(inputCity);
   
       // save the list of cities to local storage again
