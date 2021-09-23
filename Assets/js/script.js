@@ -1,32 +1,34 @@
 //loads data from last search
 $(document).ready(function () {
-    genHistory();
+    formHistory();
     let lastSearched = JSON.parse(localStorage.getItem("inputCity"));
     if (lastSearched?.length > 0) {
       //checks to see if search history is in local storage
+      
       //if it is then it fetches the data
       let lastCity = lastSearched[lastSearched.length - 1];
+      
       //shows the weather data of the last searched city
-      createQuery(lastCity);
+      makeQuery(lastCity);
     }
     
     $(".handleCitySearch").on("click", function (event) {
       event.preventDefault();
-      createQuery();
+      makeQuery();
       let inputCity = $("#citySearch").val();
   
       // get list of cities from local storage and if the data doesn't exist create an empty array
       let cityArray = JSON.parse(localStorage.getItem("inputCity")) || [];
   
-    
+      // add inputCity to li
       cityArray.push(inputCity);
   
       // save the list of cities to local storage again
       localStorage.setItem("inputCity", JSON.stringify(cityArray));
-      genHistory();
+      formHistory();
     });
   
-    function createQuery(city) {
+    function makeQuery(city) {
       let inputCity = city ? city : $("#citySearch").val();
   
       //Current Weather Data API + the city searched from the input field
@@ -40,7 +42,9 @@ $(document).ready(function () {
       $.ajax({
         url: query1URL,
         method: "GET",
-      }).then(function (data) {
+      })
+      
+      .then(function (data) {
         console.log("I am current data: ");
         console.log(data);
         let query2URL =
@@ -54,67 +58,69 @@ $(document).ready(function () {
         $.ajax({
           url: query2URL,
           method: "GET",
-        }).then(function (uvExtendedData) {
+        })
+        
+        .then(function (uvInfo) {
           console.log("I am uv and extended data: ");
-          console.log(uvExtendedData);
+          console.log(uvInfo);
   
           //create weatherIcon variable to display the weather icon 
-          let weatherIcon = uvExtendedData.current.weather[0].icon;
+          let weatherIcon = uvInfo.current.weather[0].icon;
           let iconURL =
             "https://openweathermap.org/img/wn/" + weatherIcon + ".png";
   
           //create container to hold the 5-day forecast information
-          $(".reportColumn").html("");
+          $(".forBox").html("");
   
-          $(".reportColumn").append(
-            '<div class="todaysForecastContainer"></div>'
+          $(".forBox").append(
+            '<div id="currentWeather"></div>'
           );
           //append divs to the container to display all the necessary data
-          $(".todaysForecastContainer").append(
+          $("#currentWeather").append(
             `<h2 class="currentCity">${
               data.name
               //moment.unix() to format dt unix
             } <span class="currentCityDate">(${moment
-              .unix(uvExtendedData?.current?.dt)
+              .unix(uvInfo?.current?.dt)
               .format(
                 "M/DD/YYYY"
               )})</span> <img id="weatherIcon" src="${iconURL}"/></h2>`
           );
   
-          $(".todaysForecastContainer").append(
+          $("#currentWeather").append(
             `<p class="currentCityTemp">Temperature: ${
-              uvExtendedData.current.temp + " &deg;F"
+              uvInfo.current.temp + " &deg;F"
             }</p>`
           );
   
-          $(".todaysForecastContainer").append(
+          $("#currentWeather").append(
             `<p class="currentCityHumidity">Humidity: ${
-              uvExtendedData.current.humidity + "%"
+              uvInfo.current.humidity + "%"
             }</p>`
           );
   
-          $(".todaysForecastContainer").append(
+          $("#currentWeather").append(
             `<p class="currentCityWindSpeed">Wind Speed: ${
-              uvExtendedData.current.wind_speed + " MPH"
+              uvInfo.current.wind_speed + " MPH"
             }</p>`
           );
   
-          $(".todaysForecastContainer").append(
+          $("#currentWeather").append(
             `<p>
             UV Index:
-            <span class="${uivClassName(uvExtendedData.current.uvi)}"
-              >${uvExtendedData.current.uvi}</span
+            <span class="${uvTitle(uvInfo.current.uvi)}"
+              >${uvInfo.current.uvi}</span
             >
           </p>`
           );
           //append divs to the container
-          $(".reportColumn").append('<div class="multiForecastContainer"></div>');
-          $(".multiForecastContainer").append("<h2>5-Day Forecast:</h2>");
-          $(".multiForecastContainer").append(
+          $(".forBox").append('<div id="multiForecastBox"></div>');
+          $("#multiForecastBox").append("<h2>5-Day Forecast:</h2>");
+          $("#multiForecastBox").append(
             '<div class="forecastCardsContainer"></div>'
           );
           
-          uvExtendedData?.daily?.map((day, index) => {
+          uvInfo?.daily?.map((day, index) => {
             if (index > 0 && index < 6) {
               $(".forecastCardsContainer").append(
                 `
@@ -134,24 +140,24 @@ $(document).ready(function () {
       });
     }
     //function to return uv classes' for today's date
-    function uivClassName(uvi) {
+    function uvTitle(uvi) {
       if (uvi < 4) {
-        return "uv-favorable";
+        return "uv-fav";
       } else if (uvi >= 4 && uvi <= 10) {
-        return "uv-moderate";
+        return "uv-mod";
       } else if (uvi > 11) {
-        return "uv-extreme";
+        return "uv-ext";
       } else {
-        return "uv-undefined";
+        return "uv-und";
       }
     }
   
     //function to create searched city buttons
-    function genHistory() {
+    function formHistory() {
       // get search history from local storage
-      let cityHistory = JSON.parse(localStorage.getItem("inputCity"));
+      let cityData = JSON.parse(localStorage.getItem("inputCity"));
       //if search history doesn't exist, then create a search history container
-      if (!$(".searchHistoryContainer")?.length && cityHistory?.length) {
+      if (!$(".searchHistoryContainer")?.length && cityData?.length) {
         $(".searchColumn").append('<div class="searchHistoryContainer"></div>');
       }
   
@@ -160,10 +166,10 @@ $(document).ready(function () {
       
       for (
         let cityCounter = 0;
-        cityCounter < cityHistory?.length;
+        cityCounter < cityData?.length;
         cityCounter++
       ) {
-        let city = cityHistory[cityCounter];
+        let city = cityData[cityCounter];
         $(".searchHistoryContainer").append(
           `<button id="CityBtn${cityCounter}">${city}</button>`
         );
@@ -172,7 +178,7 @@ $(document).ready(function () {
           "click",
           `#CityBtn${cityCounter}`,
           function () {
-            createQuery(city);
+            makeQuery(city);
             localStorage.setItem("city", JSON.stringify(city));
           }
         );
