@@ -38,7 +38,7 @@ button.addEventListener("click", (event) => {
     <span class="currentCityDate">
     (${moment
       .unix(weatherData.current.dt)
-      .format("M/DD/YYYY")})</span> <img id="weatherIcon" src="${symbolLink}"/>
+      .format("MM/DD/YYYY")})</span> <img id="weatherIcon" src="${symbolLink}"/>
     </h2>
     $("#currentWeather").append(
       <p class="currentCityTemp">Temperature: ${
@@ -69,8 +69,8 @@ button.addEventListener("click", (event) => {
     weatherDetails.innerHTML = markup;
     document.body.appendChild(weatherDetails);
     // make sure there's no duplicates and when called there will only be one request per city
-    var lsObjects = list.selectAll(".forecastCard");
-    var lsObjArray = Array.from(lsObjects);
+    // var lsObjects = list.selectAll(".forecastCard");
+    // var lsObjArray = Array.from(lsObjects);
   }
   startWeather();
 });
