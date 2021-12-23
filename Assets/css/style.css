@@ -52,7 +52,7 @@ p {
 }
 
 .flexContainer {
-  display: center;
+  display: flex;
   max-width: 950px;
   margin: auto;
   align-content: center;
